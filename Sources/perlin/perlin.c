@@ -31,7 +31,7 @@ uint16_t getNumCores() {
         if(count < 1) { count = 1; }
     }
     
-    printf("\n\tCPU: %i, %i \n\n", HW_NCPU, count);
+    printf("\n\tCPU: %i core \n\n", count);
 #else
     
     printf("This system has %d processors configured and %d processors available.\n",
@@ -70,10 +70,10 @@ uint16_t get_noise() {
         threadParams -> width = 650;
         
         threadParams -> x = 1 + i;
-        
-        //printf("[Allocate] data in address: %p \n", me);
-        //printf("x = %i\n", me->x);
-        
+        /*
+        printf("[Allocate] data in address: %p \n", me);
+        printf("x = %i\n", me->x);
+        */
         pthread_create(&threads[i], NULL, processArray, threadParams);
         
         printf("[Creating] %i thread \n", i);
@@ -81,3 +81,43 @@ uint16_t get_noise() {
     
     return getNumCores();
 };
+
+int8_t isAVX(void) {
+    static
+    int8_t
+    CPU_FEATURE = -1;
+    
+    __builtin_cpu_init();
+    
+    printf("CPU supports ");
+    
+    if (CPU_SSE2) {
+        printf("SSE 2 ");
+    }
+    if (CPU_SSE3) {
+        printf("SSE 3 ");
+    }
+    
+    if (CPU_SSE41) {
+        printf("SSE 4.1 ");
+        CPU_FEATURE = 0;
+    }
+    if (CPU_SSE42) {
+        printf("SSE 4.2 ");
+        CPU_FEATURE = 1;
+    }
+    if (CPU_AVX) {
+        printf("AVX ");
+        CPU_FEATURE = 2;
+    }
+    if (CPU_AVX2) {
+        printf("AVX2 ");
+        CPU_FEATURE = 3;
+    }
+    if (CPU_AVX512) {
+        printf("AVX512 (!)");
+        CPU_FEATURE = 4;
+    }
+    printf("\n");
+    return CPU_FEATURE;
+}
