@@ -7,39 +7,21 @@
 //
 #import "perlin.h"
 
-#ifdef __APPLE__
-    #import <sys/sysctl.h>
-#else
-    #import <sys/sysinfo.h>
-#endif
+#include <unistd.h>
 
 #define NUM_OF_THREADS 4
 
 uint16_t getNumCores() {
-    uint16_t count;
-#ifdef __APPLE__
-    int nm[2];
-    size_t len = 4;
-    
-    
-    nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
-    sysctl(nm, 2, &count, &len, NULL, 0);
-    
-    if(count < 1) {
-        nm[1] = HW_NCPU;
-        sysctl(nm, 2, &count, &len, NULL, 0);
-        if(count < 1) { count = 1; }
-    }
-    
-    printf("\n\tCPU: %i core \n\n", count);
+    long count;
+#ifdef _SC_NPROCESSORS_ONLN
+    /* Many systems using sysconf() */
+    count = sysconf(_SC_NPROCESSORS_ONLN);
 #else
-    
-    printf("This system has %d processors configured and %d processors available.\n",
-    get_nprocs_conf(), get_nprocs());
-    
-    count = get_nprocs();
+    /* IRIX */
+    count = sysconf(_SC_NPROC_ONLN);
 #endif
-    return count;
+
+    return (uint16_t)count;
 }
 
 struct perlinData
