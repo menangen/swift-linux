@@ -10,7 +10,6 @@ import perlin
 
 var x: UInt16 = get_noise()
 
-print("Hello, World! \(x)")
+print("Number cores in system: \(x)")
 
-let name: String = "Menangen"
-print("You name: " + name)
+isAVX();

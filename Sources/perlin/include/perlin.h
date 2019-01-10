@@ -6,5 +6,7 @@
 #import <pthread.h>
 
 #import <stdint.h>
+#import "macros.h"
 
 uint16_t get_noise();
+int8_t  isAVX(void);
