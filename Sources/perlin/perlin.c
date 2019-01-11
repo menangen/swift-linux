@@ -7,8 +7,6 @@
 //
 #import "perlin.h"
 
-#include <unistd.h>
-
 #define NUM_OF_THREADS 4
 
 uint16_t getNumCores() {

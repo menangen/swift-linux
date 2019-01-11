@@ -8,8 +8,4 @@
 
 import perlin
 
-var x: UInt16 = get_noise()
-
-print("Number cores in system: \(x)")
-
-isAVX();
+print("Hello")
