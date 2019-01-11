@@ -10,4 +10,4 @@
 #include <stdio.h>
 #include <string.h>
 
-void socketStart(const char* Message, const char* socketPath);
+void unixSocketStart(const char* Message, const char* socketPath);

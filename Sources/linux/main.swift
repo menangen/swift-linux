@@ -10,4 +10,4 @@ import perlin
 import sockets
 
 
-socketStart("Hello from Swift 4.2", "/tmp/gameserver");
+unixSocketStart("Hello from Swift 4.2", "/tmp/gameserver");
