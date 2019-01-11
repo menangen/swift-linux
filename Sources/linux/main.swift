@@ -7,5 +7,7 @@
 //
 
 import perlin
+import sockets
 
-print("Hello")
+
+socketStart("Hello from Swift 4.2", "/tmp/gameserver");
