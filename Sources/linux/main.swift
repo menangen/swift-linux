@@ -10,4 +10,8 @@ import perlin
 import sockets
 
 
-unixSocketStart("Hello from Swift 4.2", "/tmp/gameserver");
+
+let s = Socket()
+s.connect()
+s.send()
+s.close()

@@ -4,61 +4,72 @@
 //
 #import "sockets.h"
 
-void unixSocketStart(const char* Message, const char* socketPath)
-{
+const
+BSDSocket*
+UnixSocketOpen(const char* socketPath) {
+    BSDSocket*
+    UnixSocket = malloc( sizeof(BSDSocket) );
+    
     // setup socket
+    UnixSocket -> config.sun_family = AF_UNIX;
+    UnixSocket -> id = socket(AF_UNIX, SOCK_STREAM, 0);
     
-    struct sockaddr_un
-    socketConfig = {
-        .sun_family = AF_UNIX,
-        .sun_path = "/tmp/gameserver"
-    };
+    if (strncmp("", socketPath, 64)) strncpy(UnixSocket -> config.sun_path, socketPath, 64);
     
-    if (strncmp("", socketPath, 64)) strncpy(socketConfig.sun_path, socketPath, 64);
+    printf("Init Unix socket [ %s id: %d]\n", UnixSocket -> config.sun_path, UnixSocket -> id);
     
-    int
-    unixSocket = socket(AF_UNIX, SOCK_STREAM, 0);
-    printf("Opening unix socket %s [%d]\n", socketConfig.sun_path, unixSocket);
-    
-    // connect to server
-    
-    int8_t
+    return UnixSocket;
+}
+
+void
+SocketClose(const BSDSocket* Socket)
+{
+    printf("Closing socket \n\n");
+    close(Socket);
+}
+
+const
+BSDConnection
+SocketConnect(const BSDSocket* Socket) {
+    BSDConnection
     Connection = -1;
     
-    while (Connection != 0) {
-        Connection = connect(unixSocket, (struct sockaddr *)&socketConfig, sizeof(socketConfig));
-        
-        switch (Connection) {
-            case 0:
-                printf("Connected to %s\n", socketPath);
-                
-                // send message
-                
-                send(unixSocket, Message, strlen(Message), 0);
-                
-                // receive messages
-                /*
-                char
-                socketBuffer[4096];
-
-                int
-                len = recv(Connection, socketBuffer, sizeof(socketBuffer), 0);
-                
-                if ( len != 0 ) {
-                    printf("Recieved response: %s\n", socketBuffer);
-                }
-                */
-                
-                break;
-                
-            default:
-                printf("Error connect to %s socket\n", socketPath);
-                break;
-        }
-        
-        
-        sleep(2);
+    printf("Opening unix socket wih id: [%d]\n", Socket -> id);
+    Connection = connect(Socket -> id, (struct sockaddr *) &Socket -> config, sizeof(Socket -> config));
+    
+    switch (Connection) {
+        case 0:
+            printf("Connected...\n");
+            break;
+            
+        default:
+            printf("Error connection to socket \n");
+            break;
     }
     
-    close(unixSocket);
+    return Connection;
+}
+
+
+void SocketSend(const BSDSocket* Socket, const char* Message)
+{
+    printf("Sending Data \n");
+    send(Socket -> id, Message, strlen(Message), 0);
+}
+
+char SocketRead(const BSDConnection Connection)
+{
+    printf("Reading Data \n");
+    static
+    char
+    socketBuffer[4096];
+    
+    int
+    len = recv(Connection, socketBuffer, sizeof(socketBuffer), 0);
+    
+    if ( len != 0 ) {
+        printf("Recieved response: %s\n", socketBuffer);
+    }
+    
+    return socketBuffer;
 }
