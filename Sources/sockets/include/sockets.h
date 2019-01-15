@@ -33,4 +33,4 @@ BSDConnection
 SocketConnect(const BSDSocket* Socket);
 
 void
-SocketSend(const BSDSocket* Socket, const char* Message);
+SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Length);

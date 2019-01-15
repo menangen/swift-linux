@@ -8,10 +8,11 @@
 
 import perlin
 import sockets
-
-
+import Foundation
 
 let s = Socket()
 s.connect()
-s.send()
+s.send("Hello from swift".data(using: .utf8)!)
 s.close()
+
+print("Completed")

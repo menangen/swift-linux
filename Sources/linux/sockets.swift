@@ -4,7 +4,7 @@
 //
 //  Created by menangen on 12.01.2019.
 //
-
+import Foundation
 import sockets
 
 class Socket {
@@ -27,9 +27,10 @@ class Socket {
         SocketClose(self.sock)
     }
     
-    func send() {
-        let message = "ok"
+    func send(_ data: Data) {
         
-        SocketSend(self.sock, message)
+        data.withUnsafeBytes { (u8Ptr: UnsafePointer<UInt8>) in // UnsafeRawPointer(u8Ptr)
+            SocketSend(self.sock, u8Ptr, data.count)
+        }
     }
 }

@@ -51,10 +51,10 @@ SocketConnect(const BSDSocket* Socket) {
 }
 
 
-void SocketSend(const BSDSocket* Socket, const char* Message)
+void SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Length)
 {
     printf("Sending Data \n");
-    send(Socket -> id, Message, strlen(Message), 0);
+    send(Socket -> id, Data, Length, 0);
 }
 
 char SocketRead(const BSDConnection Connection)
