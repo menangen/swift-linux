@@ -4,7 +4,6 @@
 //
 //  Created by menangen on 18/01/2019.
 //
-
 #import "sockets.h"
 
 const
@@ -73,5 +72,5 @@ void
 UDPSocketClose(const UDPBSDSocket* Socket)
 {
     printf("Closing socket \n\n");
-    close(Socket);
+    close(Socket -> id);
 }

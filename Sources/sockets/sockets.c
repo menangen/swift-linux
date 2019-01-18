@@ -25,7 +25,7 @@ void
 SocketClose(const BSDSocket* Socket)
 {
     printf("Closing socket \n\n");
-    close(Socket);
+    close(Socket -> id);
 }
 
 const
@@ -49,7 +49,6 @@ SocketConnect(const BSDSocket* Socket) {
     
     return Connection;
 }
-
 
 void SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Length)
 {
