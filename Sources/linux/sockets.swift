@@ -7,13 +7,9 @@
 import Foundation
 import sockets
 
-class Socket {
+class UnixSocket {
     private var sock: UnsafePointer<BSDSocket>
     private var connection: BSDConnection?
-    
-    enum type {
-        case unix
-    }
     
     init(_ path: String = "/tmp/gameserver") {
         self.sock = UnixSocketOpen(path)
@@ -32,5 +28,23 @@ class Socket {
         data.withUnsafeBytes { (u8Ptr: UnsafePointer<UInt8>) in // UnsafeRawPointer(u8Ptr)
             SocketSend(self.sock, u8Ptr, data.count)
         }
+    }
+}
+
+class UDPSocket {
+    private var sock: UnsafePointer<UDPBSDSocket>
+
+    init(_ port: UInt16 = 5000) {
+        self.sock = UDPSocketOpen(String(port))
+    }
+    
+    func read() -> Data {
+        var udpPacket: UDPPacket = UDPSocketRead(self.sock)
+        
+        return Data(bytes: &udpPacket.data, count: Int(udpPacket.size))
+    }
+    
+    func close() {
+        UDPSocketClose(self.sock)
     }
 }

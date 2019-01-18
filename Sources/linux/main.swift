@@ -10,9 +10,7 @@ import perlin
 import sockets
 import Foundation
 
-let s = Socket()
-s.connect()
-s.send("Hello from swift".data(using: .utf8)!)
-s.close()
-
-print("Completed")
+let socket = UDPSocket(5000)
+let data = socket.read()
+print("Data:", String(data: data, encoding: .ascii) ?? "")
+socket.close()

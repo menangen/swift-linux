@@ -57,11 +57,13 @@ void SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Lengt
     send(Socket -> id, Data, Length, 0);
 }
 
-char SocketRead(const BSDConnection Connection)
+const
+uint8_t*
+SocketRead(const BSDConnection Connection)
 {
     printf("Reading Data \n");
     static
-    char
+    uint8_t
     socketBuffer[4096];
     
     int
