@@ -5,6 +5,8 @@
 #import <stdlib.h>
 #import <pthread.h>
 
+#import <unistd.h>
+
 #import <stdint.h>
 #import "macros.h"
 

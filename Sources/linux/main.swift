@@ -7,9 +7,12 @@
 //
 
 import perlin
+import sockets
+import Foundation
 
-var x: UInt16 = get_noise()
+let s = Socket()
+s.connect()
+s.send("Hello from swift".data(using: .utf8)!)
+s.close()
 
-print("Number cores in system: \(x)")
-
-isAVX();
+print("Completed")
