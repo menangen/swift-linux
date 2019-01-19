@@ -10,7 +10,18 @@ import perlin
 import sockets
 import Foundation
 
-let socket = UDPSocket(5000)
-let data = socket.read()
-print("Data:", String(data: data, encoding: .ascii) ?? "")
-socket.close()
+let s = UnixSocket()
+
+do {
+    try s.connect()
+    
+    sleep(4)
+    s.send("Hello from swift".data(using: .utf8)!)
+    
+    print("Completed")
+}
+catch {
+    print("Error Unix socket opening")
+}
+
+

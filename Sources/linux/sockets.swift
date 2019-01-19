@@ -7,16 +7,25 @@
 import Foundation
 import sockets
 
+enum SocketError: Error {
+    case open
+}
+
 class UnixSocket {
     private var sock: UnsafePointer<BSDSocket>
-    private var connection: BSDConnection?
     
     init(_ path: String = "/tmp/gameserver") {
         self.sock = UnixSocketOpen(path)
     }
     
-    func connect() {
-        self.connection = SocketConnect(self.sock)
+    deinit {
+        self.close()
+    }
+    
+    func connect() throws {
+        guard SocketConnect(self.sock) else {
+            throw SocketError.open
+        }
     }
     
     func close() {
@@ -36,6 +45,10 @@ class UDPSocket {
 
     init(_ port: UInt16 = 5000) {
         self.sock = UDPSocketOpen(String(port))
+    }
+    
+    deinit {
+        self.close()
     }
     
     func read() -> Data {

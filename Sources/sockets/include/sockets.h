@@ -10,12 +10,9 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
+#import <stdbool.h>
 
 #import "udp.h"
-
-typedef int
-BSDSocketID,
-BSDConnection;
 
 struct BSDSocket {
     struct sockaddr_un config;
@@ -31,7 +28,7 @@ void
 SocketClose(const BSDSocket* Socket);
 
 const
-BSDConnection
+bool
 SocketConnect(const BSDSocket* Socket);
 
 void
