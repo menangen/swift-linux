@@ -10,9 +10,18 @@ import perlin
 import sockets
 import Foundation
 
-let s = Socket()
-s.connect()
-s.send("Hello from swift".data(using: .utf8)!)
-s.close()
+let s = UnixSocket()
 
-print("Completed")
+do {
+    try s.connect()
+    
+    sleep(4)
+    s.send("Hello from swift".data(using: .utf8)!)
+    
+    print("Completed")
+}
+catch {
+    print("Error Unix socket opening")
+}
+
+

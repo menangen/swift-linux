@@ -25,31 +25,23 @@ void
 SocketClose(const BSDSocket* Socket)
 {
     printf("Closing socket \n\n");
-    close(Socket);
+    close(Socket -> id);
 }
 
 const
-BSDConnection
+bool
 SocketConnect(const BSDSocket* Socket) {
-    BSDConnection
-    Connection = -1;
+    // printf("Opening unix socket wih id: [%d]\n", Socket -> id);
     
-    printf("Opening unix socket wih id: [%d]\n", Socket -> id);
-    Connection = connect(Socket -> id, (struct sockaddr *) &Socket -> config, sizeof(Socket -> config));
-    
-    switch (Connection) {
-        case 0:
-            printf("Connected...\n");
-            break;
-            
-        default:
-            printf("Error connection to socket \n");
-            break;
-    }
-    
-    return Connection;
+    return
+    0 == connect(
+                 Socket -> id,
+         (struct sockaddr *)
+                 &Socket -> config,
+         sizeof(
+                 Socket -> config
+         ));
 }
-
 
 void SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Length)
 {
@@ -57,19 +49,21 @@ void SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Lengt
     send(Socket -> id, Data, Length, 0);
 }
 
-char SocketRead(const BSDConnection Connection)
+const
+uint8_t*
+SocketRead(const BSDSocket* Socket)
 {
     printf("Reading Data \n");
     static
-    char
+    uint8_t
     socketBuffer[4096];
     
     int
-    len = recv(Connection, socketBuffer, sizeof(socketBuffer), 0);
+    len = recv(Socket -> id, socketBuffer, sizeof(socketBuffer), 0);
     
     if ( len != 0 ) {
         printf("Recieved response: %s\n", socketBuffer);
+        return socketBuffer;
     }
-    
-    return socketBuffer;
+    return NULL;
 }
