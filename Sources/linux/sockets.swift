@@ -32,11 +32,20 @@ class UnixSocket {
         SocketClose(self.sock)
     }
     
+    func read() -> Data {
+        var buffer: StreamSocketBuffer = SocketRead(self.sock)
+        
+        return Data(bytes: &buffer.data, count: Int(buffer.size))
+    }
+    
     func send(_ data: Data) {
         
+        let res: Bool =
         data.withUnsafeBytes { (u8Ptr: UnsafePointer<UInt8>) in // UnsafeRawPointer(u8Ptr)
             SocketSend(self.sock, u8Ptr, data.count)
         }
+        
+        print(res)
     }
 }
 
