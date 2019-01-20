@@ -14,6 +14,12 @@ UnixSocketOpen(const char* socketPath) {
     UnixSocket -> config.sun_family = AF_UNIX;
     UnixSocket -> id = socket(AF_UNIX, SOCK_STREAM, 0);
     
+#ifdef __APPLE__
+    uint8_t
+    noPipeError = 1;
+    setsockopt(UnixSocket -> id, SOL_SOCKET, SO_NOSIGPIPE, (void *)&noPipeError, sizeof(int));
+#endif
+    
     if (strncmp("", socketPath, 64)) strncpy(UnixSocket -> config.sun_path, socketPath, 64);
     
     printf("Init Unix socket [ %s id: %d]\n", UnixSocket -> config.sun_path, UnixSocket -> id);
@@ -43,27 +49,49 @@ SocketConnect(const BSDSocket* Socket) {
          ));
 }
 
-void SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Length)
+const
+bool
+SocketSend(const BSDSocket* Socket, const uint8_t* Data, const size_t Length)
 {
-    printf("Sending Data \n");
-    send(Socket -> id, Data, Length, 0);
+    printf("Sending Unix socket Data \n");
+
+    if (
+        -1 ==
+        send(
+             Socket -> id,
+             Data,
+             Length,
+#ifdef __APPLE__
+             0
+#else
+             MSG_NOSIGNAL
+#endif
+             )
+    ) {
+        printf("Sending ERROR \n");
+        return false;
+    };
+    return true;
 }
 
 const
-uint8_t*
+StreamSocketBuffer
 SocketRead(const BSDSocket* Socket)
 {
     printf("Reading Data \n");
+    
     static
-    uint8_t
-    socketBuffer[4096];
+    StreamSocketBuffer
+    buffer;
     
-    int
-    len = recv(Socket -> id, socketBuffer, sizeof(socketBuffer), 0);
+    buffer.size = recv(Socket -> id, buffer.data, sizeof(buffer.data), 0);
     
-    if ( len != 0 ) {
-        printf("Recieved response: %s\n", socketBuffer);
-        return socketBuffer;
+    if ( buffer.size > 0 ) {
+        printf("Recieved response: %s\n", buffer.data);
     }
-    return NULL;
+    else {
+        printf("Socket closed");
+    }
+    
+    return buffer;
 }

@@ -11,10 +11,15 @@ import sockets
 import Foundation
 
 let s = UnixSocket()
+let q = OperationQueue()
 
 do {
     try s.connect()
-    
+    let block = BlockOperation {
+        print(s.read())
+    }
+
+    q.addOperations([block], waitUntilFinished: false)
     sleep(4)
     s.send("Hello from swift".data(using: .utf8)!)
     
@@ -23,5 +28,3 @@ do {
 catch {
     print("Error Unix socket opening")
 }
-
-
