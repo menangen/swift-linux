@@ -12,6 +12,7 @@
 #import <stdlib.h>
 #import <string.h>
 #import <stdbool.h>
+#import <stdint.h>
 
 #import "udp.h"
 
