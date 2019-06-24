@@ -9,3 +9,6 @@ production:
 
 clean:
 	rm -r ./.build
+
+test:
+	swift test

@@ -7,7 +7,8 @@
 //
 #import "perlin.h"
 
-#define NUM_OF_THREADS 4
+#define NUM_OF_THREADS 8
+#define BREAK "_____________ \n"
 
 uint16_t getNumCores() {
     long count;
@@ -69,35 +70,39 @@ int8_t isAVX(void) {
     
     __builtin_cpu_init();
     
+    
+    printf("\n");
     printf("CPU supports ");
     
+    // Checking CPU intrinsics
+    // SSE
     if (CPU_SSE2) {
-        printf("SSE 2 ");
+        printf("SSE2 ");
     }
     if (CPU_SSE3) {
-        printf("SSE 3 ");
+        printf("SSE3 ");
     }
-    
     if (CPU_SSE41) {
-        printf("SSE 4.1 ");
-        CPU_FEATURE = 0;
+        printf("SSE4.1 ");
     }
     if (CPU_SSE42) {
-        printf("SSE 4.2 ");
-        CPU_FEATURE = 1;
+        printf("SSE4.2 ");
     }
+    // AVX
     if (CPU_AVX) {
-        printf("AVX ");
-        CPU_FEATURE = 2;
+        printf("AVX1 ");
+        CPU_FEATURE = 0;
     }
     if (CPU_AVX2) {
         printf("AVX2 ");
-        CPU_FEATURE = 3;
+        CPU_FEATURE = 1;
     }
     if (CPU_AVX512) {
         printf("AVX512 (!)");
-        CPU_FEATURE = 4;
+        CPU_FEATURE = 2;
     }
     printf("\n");
+    printf(BREAK);
+    
     return CPU_FEATURE;
 }

@@ -11,4 +11,5 @@
 #import "macros.h"
 
 uint16_t get_noise();
+uint16_t getNumCores();
 int8_t  isAVX(void);
