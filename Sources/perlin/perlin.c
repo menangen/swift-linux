@@ -5,6 +5,12 @@
 //  Created by menangen on 11.07.18.
 //  Copyright (c) 2018 menangen. All rights reserved.
 //
+#import <stdio.h>
+#import <stdlib.h>
+#import <stdint.h>
+
+#import <pthread.h>
+
 #import "perlin.h"
 
 #ifdef __APPLE__
