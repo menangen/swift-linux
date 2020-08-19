@@ -17,7 +17,11 @@ let package = Package(
             dependencies: [],
             path: "Sources/perlin"),
         .target(
+            name: "sockets",
+            dependencies: [],
+            path: "Sources/sockets"),
+        .target(
             name: "linux",
-            dependencies: ["perlin"])
+            dependencies: ["perlin", "sockets"])
     ]
 )

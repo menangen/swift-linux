@@ -7,10 +7,24 @@
 //
 
 import perlin
+import sockets
+import Foundation
 
-var x: UInt16 = get_noise()
+let s = UnixSocket()
+let q = OperationQueue()
 
-print("Hello, World! \(x)")
+do {
+    try s.connect()
+    let block = BlockOperation {
+        print(s.read())
+    }
 
-let name: String = "Menangen"
-print("You name: " + name)
+    q.addOperations([block], waitUntilFinished: false)
+    sleep(4)
+    s.send("Hello from swift".data(using: .utf8)!)
+    
+    print("Completed")
+}
+catch {
+    print("Error Unix socket opening")
+}
