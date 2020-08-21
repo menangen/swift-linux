@@ -41,8 +41,8 @@ class UnixSocket {
     func send(_ data: Data) {
         
         let res: Bool =
-        data.withUnsafeBytes { (u8Ptr: UnsafePointer<UInt8>) in // UnsafeRawPointer(u8Ptr)
-            SocketSend(self.sock, u8Ptr, data.count)
+        data.withUnsafeBytes {
+            SocketSend(self.sock, $0, data.count)
         }
         
         print(res)
